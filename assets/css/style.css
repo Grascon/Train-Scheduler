@@ -1,0 +1,30 @@
+body {
+	font-family: 'Roboto', sans-serif;
+}
+.container {
+	
+}
+.page-header {
+	margin-top: 10px;
+    height: 80px;
+    text-align: center;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #337ab7;
+    color: white;
+    font-weight: bold;
+}
+.panel-default {
+    border-color: #337ab7;
+}
+.panel-default>.panel-heading {
+	background-color: #337ab7;
+	text-align: center;
+}
+h1 {
+	font-weight: bold;
+}
+.panel-title {
+	font-weight: bold;
+	color: white;
+}
