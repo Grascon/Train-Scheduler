@@ -28,3 +28,12 @@ h1 {
 	font-weight: bold;
 	color: white;
 }
+.form-control {
+	text-align: center;
+}
+th {
+	text-align: center;
+}
+td {
+	text-align: center;
+}
