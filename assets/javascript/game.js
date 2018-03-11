@@ -62,6 +62,7 @@ $(document).ready(function(){
       return false;
     }
 
+    //setting variables in object locally
     var newTrain = {
       name: name,
       destination: destination,
@@ -71,6 +72,7 @@ $(document).ready(function(){
 
     console.log(newTrain);
     
+    //pushing objects to firebase
     database.ref().push(newTrain);
 
     $("#input-name").val("");
@@ -79,48 +81,60 @@ $(document).ready(function(){
     $("#frequency").val("");
   });
 
-  database.ref().on("child_added", function(ChildSnapshot){
-    var child = ChildSnapshot.val();
-    var trainName = child.name;
-    var trainDestination = child.destination;
-    var timeFirstTrain = child.firstTrain;
-    var trainFrequency = child.frequency;
+  function childFunction (){
+    database.ref().on("child_added", function(ChildSnapshot){
+      var child = ChildSnapshot.val();
+      var trainName = child.name;
+      var trainDestination = child.destination;
+      var timeFirstTrain = child.firstTrain;
+      var trainFrequency = child.frequency;
+      
+      //getting time of first train (should return in long number format)
+      var convertedTime = moment(timeFirstTrain, 'HH:mm');
+      console.log("Converted Time: " + convertedTime);
+      
+      //first train time in actual hour:minute format
+      var firstTrainCoverted = moment(convertedTime).format('HH:mm');
+      console.log("First Train Time: " + firstTrainCoverted);
+
+      //difference between current time and first arrival
+      var timeDifference = moment().diff(moment(convertedTime), 'minutes');
+      console.log(timeDifference);
+
+      //will provide the minutes left when dividing time difference by train frequency
+      //this number will be used later to determine minutes left until next train arrives
+      var timeRemaining = timeDifference % trainFrequency;
+      console.log("Left over time: " + timeRemaining);
+
+      //to get minutes away, subtract from train frequency the minutes left over when dividing time difference
+      //from first train arrival and current time
+      var minutesAway = trainFrequency - timeRemaining;
+      console.log("Minutes Away: " + minutesAway);
+
+      //adding minutes away to current time to determine next arrival
+      var nextArrival = moment().add(minutesAway, 'minutes');
+     
+      //adding to html
+      $("#trains").append(
+        "<tr><td id='name-display'>" + trainName + "</td>" +
+        "<td id='destination-display'>" + trainDestination + "</td>" +
+        "<td id= 'frequency-display'>" + trainFrequency + "</td>" +
+        "<td id = 'next-arrival-display'>" + moment(nextArrival).format('HH:mm') + "</td>" + 
+        "<td id = 'minutes-away-display'>" + minutesAway + "</td></tr>"
+      );
+    }, function(errorObject){
+      console.log("Errors handled: " + errorObject.code);
+    });
     
-    //getting time of first train (should return in long number format)
-    var convertedTime = moment(timeFirstTrain, 'HH:mm');
-    console.log("Converted Time: " + convertedTime);
-    
-    //first train time in actual hour:minute format
-    var firstTrainCoverted = moment(convertedTime).format('HH:mm');
-    console.log("First Train Time: " + firstTrainCoverted);
+  }
 
-    //difference between current time and first arrival
-    var timeDifference = moment().diff(moment(convertedTime), 'minutes');
-    console.log(timeDifference);
-
-    //will provide the minutes left when dividing time difference by train frequency
-    //this number will be used later to determine minutes left until next train arrives
-    var timeRemaining = timeDifference % trainFrequency;
-    console.log("Left over time: " + timeRemaining);
-
-    //to get minutes away, subtract from train frequency the minutes left over when dividing time difference
-    //from first train arrival and current time
-    var minutesAway = trainFrequency - timeRemaining;
-    console.log("Minutes Away: " + minutesAway);
-
-    //adding minutes away to current time to determine next arrival
-    var nextArrival = moment().add(minutesAway, 'minutes');
-   
-    //adding to html
-    $("#trains").append(
-      "<tr><td id='name-display'>" + trainName + "</td>" +
-      "<td id='destination-display'>" + trainDestination + "</td>" +
-      "<td id= 'frequency-display'>" + trainFrequency + "</td>" +
-      "<td id = 'next-arrival-display'>" + moment(nextArrival).format('HH:mm') + "</td>" + 
-      "<td id = 'minutes-away-display'>" + minutesAway + "</td></tr>"
-    );
-  }, function(errorObject){
-    console.log("Errors handled: " + errorObject.code);
-  });
+  childFunction();
+  
+  window.setInterval(function() {
+    $("#trains").empty();
+    childFunction()
+    }
+    , 1000);
+  
   
 });
