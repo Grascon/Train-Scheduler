@@ -81,7 +81,6 @@ $(document).ready(function(){
     $("#frequency").val("");
   });
 
-  function childFunction (){
     database.ref().on("child_added", function(ChildSnapshot){
       var child = ChildSnapshot.val();
       var trainName = child.name;
@@ -126,8 +125,4 @@ $(document).ready(function(){
       console.log("Errors handled: " + errorObject.code);
     });
     
-  }
-	
-  childFunction();
-	
 });
