@@ -127,14 +127,7 @@ $(document).ready(function(){
     });
     
   }
-
+	
   childFunction();
-  
-  window.setInterval(function() {
-    $("#trains").empty();
-    childFunction()
-    }
-    , 1000);
-  
-  
+	
 });
