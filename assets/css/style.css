@@ -1,8 +1,12 @@
+body, html {
+	height: 100%;
+}
 body {
 	font-family: 'Roboto', sans-serif;
 }
 .container {
-	
+	margin: 0 auto;
+	margin-bottom: 20px;
 }
 .page-header {
 	margin-top: 10px;
@@ -21,6 +25,9 @@ body {
 	background-color: #337ab7;
 	text-align: center;
 }
+.panel-body {
+    padding: 5px;
+}
 h1 {
 	font-weight: bold;
 }
@@ -36,4 +43,18 @@ th {
 }
 td {
 	text-align: center;
+	width: 5px;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 0px;
+}
+.footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background-color: #337ab7;
+	color: white;
+	text-align: center;
+	height: 35px;
+    padding-top: 10px;
 }
